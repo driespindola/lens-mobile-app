@@ -1,0 +1,10 @@
+export const sanitizeIpfsUrl = (url: string) => {
+    const gateway = 'https://lens.infura-ipfs.io/ipfs/';
+    if (!url) return url;
+  
+    return url
+      .replace(/^Qm[1-9A-Za-z]{44}/gm, `${gateway}${url}`)
+      .replace("https://ipfs.io/ipfs/", gateway)
+      .replace("https://ipfs.infura.io/ipfs/", gateway)
+      .replace("ipfs://", gateway);
+  };
