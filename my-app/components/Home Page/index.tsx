@@ -1,9 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useRecommendedProfilesQuery } from '../../types/graph';
 import getAvatar from '../../utils/getAvatar';
+import { Profile } from '../../types/lens';
+import { NavigationProp } from '@react-navigation/native';
 
-const Home = () => {
+type HomeProps = {
+  navigation: NavigationProp<Record<string, object | undefined>>;
+};
+
+const Home = ({ navigation }: HomeProps) => {
   const { data, loading, error } = useRecommendedProfilesQuery({
     variables: {
       options: {
@@ -27,13 +32,16 @@ const Home = () => {
               }}
             />
             <View style={styles.itemsContainer}>
-              <Text key={profile?.id} style={{
-                fontWeight: 'bold'
-              }}>{profile.handle}</Text>
-              <View style={styles.followContainer}>
-                <Text style={styles.followers}>{profile.stats.totalFollowers} followers</Text>
-                <Text>{profile.stats.totalFollowing} following</Text>
-              </View>
+              <TouchableOpacity onPress={() => navigation.navigate('Profile', { profile: profile as Profile })}>
+                <Text key={profile?.handle} style={{
+                  fontWeight: 'bold'
+                }}>{profile.handle}</Text>
+                <View style={styles.followContainer}>
+                  <Text style={styles.followers}>{profile.stats.totalFollowers} followers</Text>
+                  <Text>{profile.stats.totalFollowing} following</Text>
+                </View>
+              </TouchableOpacity>
+              
             </View>
           </View>
         ))}
@@ -48,6 +56,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginVertical: 100,
     marginHorizontal: 50,
+    padding: 5
   },
   items: {
     marginVertical: 10,
