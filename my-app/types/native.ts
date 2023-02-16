@@ -3,7 +3,7 @@ import { Profile } from "./lens";
 
 export type RootStackParamList = {
     Home: undefined;
-    Profile: { profile: Profile };
+    Profile: { profile: any };
 };
 
 export type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Profile'>;

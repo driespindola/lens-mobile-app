@@ -4,6 +4,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ProfileScreenRouteProp, RootStackParamList } from "../../types/native";
 import { Profile } from "../../types/lens";
 import getAvatar from "../../utils/getAvatar";
+import Publications from "./Publications";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Profile">;
 
@@ -16,18 +17,22 @@ type ProfileProps = {
 
 const ProfilePage: React.FC<ProfileProps> = ({ route, navigation }) => {
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.tinyLogo}
-        source={{
-            uri: `${getAvatar(route.params.profile)}`,
-        }}
-      />
-      <View style={styles.name}>
-        <Text style={{fontWeight: 'bold'}}>{route.params?.profile?.name}</Text>
-        <Text>{route.params.profile.handle}</Text>
+    <View>
+      <View style={styles.container}>
+        <Image
+          style={styles.tinyLogo}
+          source={{
+              uri: `${getAvatar(route.params.profile)}`,
+          }}
+        />
+        <View style={styles.name}>
+          <Text style={{fontWeight: 'bold'}}>{route.params?.profile?.name}</Text>
+          <Text>{route.params.profile.handle}</Text>
+        </View>
       </View>
+      <Publications profile={route.params.profile as Profile} />
     </View>
+    
   );
 };
 

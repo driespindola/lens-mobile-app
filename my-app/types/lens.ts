@@ -33,6 +33,8 @@ export type Scalars = {
   Locale: any;
   Markdown: any;
   MimeType: any;
+  NftGalleryId: any;
+  NftGalleryName: any;
   NftOwnershipId: any;
   Nonce: any;
   NotificationId: any;
@@ -54,6 +56,40 @@ export type Scalars = {
   UnixTimestamp: any;
   Url: any;
   Void: any;
+};
+
+export type AaveFeeCollectModuleParams = {
+  /** The collect module amount info */
+  amount: ModuleFeeAmountParams;
+  /** The collect module limit */
+  collectLimit: Scalars['String'];
+  /** The timestamp that this collect module will expire */
+  endTimestamp?: InputMaybe<Scalars['DateTime']>;
+  /** Follower only */
+  followerOnly: Scalars['Boolean'];
+  /** The collect module recipient address */
+  recipient: Scalars['EthereumAddress'];
+  /** The collect module referral fee */
+  referralFee: Scalars['Float'];
+};
+
+export type AaveFeeCollectModuleSettings = {
+  __typename?: 'AaveFeeCollectModuleSettings';
+  /** The collect module amount info */
+  amount: ModuleFeeAmount;
+  /** The maximum number of collects for this publication. Omit for no limit. */
+  collectLimit?: Maybe<Scalars['String']>;
+  contractAddress: Scalars['ContractAddress'];
+  /** The end timestamp after which collecting is impossible. No expiry if missing. */
+  endTimestamp?: Maybe<Scalars['DateTime']>;
+  /** True if only followers of publisher may collect the post. */
+  followerOnly: Scalars['Boolean'];
+  /** Recipient of collect fees. */
+  recipient: Scalars['EthereumAddress'];
+  /** The referral fee associated with this publication. */
+  referralFee: Scalars['Float'];
+  /** The collect modules enum */
+  type: CollectModules;
 };
 
 /** The access conditions for the publication */
@@ -250,9 +286,13 @@ export type CollectConditionOutput = {
   thisPublication?: Maybe<Scalars['Boolean']>;
 };
 
-export type CollectModule = FeeCollectModuleSettings | FreeCollectModuleSettings | LimitedFeeCollectModuleSettings | LimitedTimedFeeCollectModuleSettings | RevertCollectModuleSettings | TimedFeeCollectModuleSettings | UnknownCollectModuleSettings;
+export type CollectModule = AaveFeeCollectModuleSettings | Erc4626FeeCollectModuleSettings | FeeCollectModuleSettings | FreeCollectModuleSettings | LimitedFeeCollectModuleSettings | LimitedTimedFeeCollectModuleSettings | MultirecipientFeeCollectModuleSettings | RevertCollectModuleSettings | TimedFeeCollectModuleSettings | UnknownCollectModuleSettings;
 
 export type CollectModuleParams = {
+  /** The collect aave fee collect module */
+  aaveFeeCollectModule?: InputMaybe<AaveFeeCollectModuleParams>;
+  /** The collect ERC4626 fee collect module */
+  erc4626FeeCollectModule?: InputMaybe<Erc4626FeeCollectModuleParams>;
   /** The collect fee collect module */
   feeCollectModule?: InputMaybe<FeeCollectModuleParams>;
   /** The collect empty collect module */
@@ -261,6 +301,8 @@ export type CollectModuleParams = {
   limitedFeeCollectModule?: InputMaybe<LimitedFeeCollectModuleParams>;
   /** The collect limited timed fee collect module */
   limitedTimedFeeCollectModule?: InputMaybe<LimitedTimedFeeCollectModuleParams>;
+  /** The multirecipient fee collect module */
+  multirecipientFeeCollectModule?: InputMaybe<MultirecipientFeeCollectModuleParams>;
   /** The collect revert collect module */
   revertCollectModule?: InputMaybe<Scalars['Boolean']>;
   /** The collect timed fee collect module */
@@ -987,6 +1029,10 @@ export type DegreesOfSeparationReferenceModuleSettings = {
   type: ReferenceModules;
 };
 
+export type DismissRecommendedProfilesRequest = {
+  profileIds: Array<Scalars['ProfileId']>;
+};
+
 /** The dispatcher */
 export type Dispatcher = {
   __typename?: 'Dispatcher';
@@ -1041,6 +1087,40 @@ export type Eip712TypedDataField = {
   name: Scalars['String'];
   /** The type of the typed data field */
   type: Scalars['String'];
+};
+
+export type Erc4626FeeCollectModuleParams = {
+  /** The collecting cost associated with this publication. 0 for free collect. */
+  amount: ModuleFeeAmountParams;
+  /** The maximum number of collects for this publication. Omit for no limit. */
+  collectLimit?: InputMaybe<Scalars['String']>;
+  /** The end timestamp after which collecting is impossible. Omit for no expiry. */
+  endTimestamp?: InputMaybe<Scalars['DateTime']>;
+  /** True if only followers of publisher may collect the post. */
+  followerOnly: Scalars['Boolean'];
+  /** The address of the recipient who will recieve vault shares after depositing is completed. */
+  recipient: Scalars['EthereumAddress'];
+  /** The referral fee associated with this publication. */
+  referralFee?: InputMaybe<Scalars['Float']>;
+  /** The address of the ERC4626 vault to deposit funds to. */
+  vault: Scalars['ContractAddress'];
+};
+
+export type Erc4626FeeCollectModuleSettings = {
+  __typename?: 'ERC4626FeeCollectModuleSettings';
+  /** The collect module amount info */
+  amount: ModuleFeeAmount;
+  /** The maximum number of collects for this publication. 0 for no limit. */
+  collectLimit?: Maybe<Scalars['String']>;
+  contractAddress: Scalars['ContractAddress'];
+  /** The end timestamp after which collecting is impossible. 0 for no expiry. */
+  endTimestamp?: Maybe<Scalars['DateTime']>;
+  /** True if only followers of publisher may collect the post. */
+  followerOnly: Scalars['Boolean'];
+  /** The referral fee associated with this publication. */
+  referralFee: Scalars['Float'];
+  /** The collect modules enum */
+  type: CollectModules;
 };
 
 export type ElectedMirror = {
@@ -1864,6 +1944,40 @@ export type ModuleInfo = {
   type: Scalars['String'];
 };
 
+export type MultirecipientFeeCollectModuleParams = {
+  /** The collecting cost associated with this publication. 0 for free collect. */
+  amount: ModuleFeeAmountParams;
+  /** The maximum number of collects for this publication. Omit for no limit. */
+  collectLimit?: InputMaybe<Scalars['String']>;
+  /** The end timestamp after which collecting is impossible. Omit for no expiry. */
+  endTimestamp?: InputMaybe<Scalars['DateTime']>;
+  /** True if only followers of publisher may collect the post. */
+  followerOnly: Scalars['Boolean'];
+  /** Recipient of collect fees. */
+  recipients: Array<RecipientDataInput>;
+  /** The referral fee associated with this publication. */
+  referralFee?: InputMaybe<Scalars['Float']>;
+};
+
+export type MultirecipientFeeCollectModuleSettings = {
+  __typename?: 'MultirecipientFeeCollectModuleSettings';
+  /** The collect module amount info */
+  amount: ModuleFeeAmount;
+  /** The maximum number of collects for this publication. 0 for no limit. */
+  collectLimit?: Maybe<Scalars['String']>;
+  contractAddress: Scalars['ContractAddress'];
+  /** The end timestamp after which collecting is impossible. 0 for no expiry. */
+  endTimestamp?: Maybe<Scalars['DateTime']>;
+  /** True if only followers of publisher may collect the post. */
+  followerOnly: Scalars['Boolean'];
+  /** Recipient of collect fees. */
+  recipients: Array<RecipientDataOutput>;
+  /** The referral fee associated with this publication. */
+  referralFee: Scalars['Float'];
+  /** The collect modules enum */
+  type: CollectModules;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   ach?: Maybe<Scalars['Void']>;
@@ -1881,6 +1995,8 @@ export type Mutation = {
   createFollowTypedData: CreateFollowBroadcastItemResult;
   createMirrorTypedData: CreateMirrorBroadcastItemResult;
   createMirrorViaDispatcher: RelayResult;
+  /** Create a new NFT gallery */
+  createNftGallery: Scalars['NftGalleryId'];
   createPostTypedData: CreatePostBroadcastItemResult;
   createPostViaDispatcher: RelayResult;
   createProfile: RelayResult;
@@ -1888,12 +2004,16 @@ export type Mutation = {
   createSetDispatcherTypedData: CreateSetDispatcherBroadcastItemResult;
   createSetFollowModuleTypedData: CreateSetFollowModuleBroadcastItemResult;
   createSetFollowNFTUriTypedData: CreateSetFollowNftUriBroadcastItemResult;
+  createSetFollowNFTUriViaDispatcher: RelayResult;
   createSetProfileImageURITypedData: CreateSetProfileImageUriBroadcastItemResult;
   createSetProfileImageURIViaDispatcher: RelayResult;
   createSetProfileMetadataTypedData: CreateSetProfileMetadataUriBroadcastItemResult;
   createSetProfileMetadataViaDispatcher: RelayResult;
   createToggleFollowTypedData: CreateToggleFollowBroadcastItemResult;
   createUnfollowTypedData: CreateUnfollowBroadcastItemResult;
+  /** Delete an NFT Gallery */
+  deleteNftGallery?: Maybe<Scalars['Void']>;
+  dismissRecommendedProfiles: Scalars['Void'];
   hel?: Maybe<Scalars['Void']>;
   hidePublication?: Maybe<Scalars['Void']>;
   idKitPhoneVerifyWebhook: IdKitPhoneVerifyWebhookResultStatusType;
@@ -1903,6 +2023,12 @@ export type Mutation = {
   removeProfileInterests?: Maybe<Scalars['Void']>;
   removeReaction?: Maybe<Scalars['Void']>;
   reportPublication?: Maybe<Scalars['Void']>;
+  /** Update the name of an NFT gallery */
+  updateNftGalleryInfo?: Maybe<Scalars['Void']>;
+  /** Add and/or remove NFTs to a gallery */
+  updateNftGalleryItems?: Maybe<Scalars['Void']>;
+  /** Update the order of NFTs in a gallery */
+  updateNftGalleryOrder?: Maybe<Scalars['Void']>;
 };
 
 
@@ -1981,6 +2107,11 @@ export type MutationCreateMirrorViaDispatcherArgs = {
 };
 
 
+export type MutationCreateNftGalleryArgs = {
+  request: NftGalleryCreateRequest;
+};
+
+
 export type MutationCreatePostTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: CreatePublicPostRequest;
@@ -2021,6 +2152,11 @@ export type MutationCreateSetFollowNftUriTypedDataArgs = {
 };
 
 
+export type MutationCreateSetFollowNftUriViaDispatcherArgs = {
+  request: CreateSetFollowNftUriRequest;
+};
+
+
 export type MutationCreateSetProfileImageUriTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: UpdateProfileImageRequest;
@@ -2052,6 +2188,16 @@ export type MutationCreateToggleFollowTypedDataArgs = {
 export type MutationCreateUnfollowTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: UnfollowRequest;
+};
+
+
+export type MutationDeleteNftGalleryArgs = {
+  request: NftGalleryDeleteRequest;
+};
+
+
+export type MutationDismissRecommendedProfilesArgs = {
+  request: DismissRecommendedProfilesRequest;
 };
 
 
@@ -2092,6 +2238,21 @@ export type MutationRemoveReactionArgs = {
 
 export type MutationReportPublicationArgs = {
   request: ReportPublicationRequest;
+};
+
+
+export type MutationUpdateNftGalleryInfoArgs = {
+  request: NftGalleryUpdateInfoRequest;
+};
+
+
+export type MutationUpdateNftGalleryItemsArgs = {
+  request: NftGalleryUpdateItemsRequest;
+};
+
+
+export type MutationUpdateNftGalleryOrderArgs = {
+  request: NftGalleryUpdateItemOrderRequest;
 };
 
 export type MutualFollowersProfilesQueryRequest = {
@@ -2219,6 +2380,79 @@ export type NewReactionNotification = {
   reaction: ReactionTypes;
 };
 
+/** The NFT gallery input */
+export type NftGalleriesRequest = {
+  /** The profile id */
+  profileId: Scalars['ProfileId'];
+};
+
+/** The NFT gallery */
+export type NftGallery = {
+  __typename?: 'NftGallery';
+  /** The creation date */
+  createdAt: Scalars['DateTime'];
+  /** The NFT gallery id */
+  id: Scalars['NftGalleryId'];
+  /** The NFTs in the gallery */
+  items: Array<Nft>;
+  /** The NFT gallery name */
+  name: Scalars['String'];
+  /** The owning profile id */
+  profileId: Scalars['ProfileId'];
+  /** The last update date */
+  updatedAt: Scalars['DateTime'];
+};
+
+/** The input for creating a new NFT gallery */
+export type NftGalleryCreateRequest = {
+  /** The NFTs in the gallery */
+  items: Array<NftInput>;
+  /** The name of the NFT gallery */
+  name: Scalars['NftGalleryName'];
+  /** The owner profile id */
+  profileId: Scalars['ProfileId'];
+};
+
+/** The input for deleting gallery */
+export type NftGalleryDeleteRequest = {
+  /** The NFT gallery id */
+  galleryId: Scalars['NftGalleryId'];
+  /** The profile id of the gallery owner */
+  profileId: Scalars['ProfileId'];
+};
+
+/** The input for updating NFT gallery name */
+export type NftGalleryUpdateInfoRequest = {
+  /** The NFT gallery id */
+  galleryId: Scalars['NftGalleryId'];
+  /** The name of the NFT gallery */
+  name: Scalars['NftGalleryName'];
+  /** The profile id of the gallery owner */
+  profileId: Scalars['ProfileId'];
+};
+
+/** The input for reordering gallery items */
+export type NftGalleryUpdateItemOrderRequest = {
+  /** The NFT gallery id */
+  galleryId: Scalars['NftGalleryId'];
+  /** The profile id of the gallery owner */
+  profileId: Scalars['ProfileId'];
+  /** The order of the NFTs in the gallery */
+  updates: Array<NftUpdateItemOrder>;
+};
+
+/** The input for adding/removing gallery items */
+export type NftGalleryUpdateItemsRequest = {
+  /** The NFT gallery id */
+  galleryId: Scalars['NftGalleryId'];
+  /** The profile id of the gallery owner */
+  profileId: Scalars['ProfileId'];
+  /** The contents of the NFT gallery */
+  toAdd?: InputMaybe<Array<NftInput>>;
+  /** The contents of the NFT gallery */
+  toRemove?: InputMaybe<Array<NftInput>>;
+};
+
 /** The NFT image */
 export type NftImage = {
   __typename?: 'NftImage';
@@ -2232,6 +2466,16 @@ export type NftImage = {
   uri: Scalars['Url'];
   /** If the NFT is verified */
   verified: Scalars['Boolean'];
+};
+
+/** The NFT input for gallery */
+export type NftInput = {
+  /** The chain ID of the NFT */
+  chainId: Scalars['ChainId'];
+  /** The contract address of the NFT */
+  contractAddress: Scalars['ContractAddress'];
+  /** The token ID of the NFT */
+  tokenId: Scalars['String'];
 };
 
 export type NftOwnershipChallenge = {
@@ -2280,6 +2524,18 @@ export type NftOwnershipOutput = {
   contractType: ContractType;
   /** The optional token ID(s) to check for ownership */
   tokenIds?: Maybe<Array<Scalars['TokenId']>>;
+};
+
+/** The input for updating the order of a NFT gallery item */
+export type NftUpdateItemOrder = {
+  /** The chain ID of the NFT */
+  chainId: Scalars['ChainId'];
+  /** The contract address of the NFT */
+  contractAddress: Scalars['ContractAddress'];
+  /** The new order of the NFT in the gallery */
+  newOrder: Scalars['Int'];
+  /** The token ID of the NFT */
+  tokenId: Scalars['String'];
 };
 
 export type Notification = NewCollectNotification | NewCommentNotification | NewFollowerNotification | NewMentionNotification | NewMirrorNotification | NewReactionNotification;
@@ -2412,7 +2668,7 @@ export type PaginatedResultInfo = {
   totalCount?: Maybe<Scalars['Int']>;
 };
 
-/** The paginated timeline result */
+/** The paginated result */
 export type PaginatedTimelineResult = {
   __typename?: 'PaginatedTimelineResult';
   items: Array<Publication>;
@@ -2813,7 +3069,7 @@ export enum PublicationMediaSource {
   Lens = 'LENS'
 }
 
-/** Publication metadata content waring filters */
+/** Publication metadata content warning filters */
 export type PublicationMetadataContentWarningFilter = {
   /** By default all content warnings will be hidden you can include them in your query by adding them to this array. */
   includeOneOf?: InputMaybe<Array<PublicationContentWarning>>;
@@ -3118,6 +3374,8 @@ export type Query = {
   internalPublicationFilter: PaginatedPublicationResult;
   isIDKitPhoneVerified: Scalars['Boolean'];
   mutualFollowersProfiles: PaginatedProfileResult;
+  /** Get all NFT galleries for a profile */
+  nftGalleries: Array<NftGallery>;
   nftOwnershipChallenge: NftOwnershipChallengeResult;
   nfts: NfTsResult;
   notifications: PaginatedNotificationResult;
@@ -3140,8 +3398,6 @@ export type Query = {
   recommendedProfiles: Array<Profile>;
   rel?: Maybe<Scalars['Void']>;
   search: SearchResult;
-  /** @deprecated You should be using feed, this will not be supported after 15th November 2021, please migrate. */
-  timeline: PaginatedTimelineResult;
   txIdToTxHash: Scalars['TxHash'];
   unknownEnabledModules: EnabledModules;
   userSigNonces: UserSigNonces;
@@ -3242,6 +3498,11 @@ export type QueryMutualFollowersProfilesArgs = {
 };
 
 
+export type QueryNftGalleriesArgs = {
+  request: NftGalleriesRequest;
+};
+
+
 export type QueryNftOwnershipChallengeArgs = {
   request: NftOwnershipChallengeRequest;
 };
@@ -3337,11 +3598,6 @@ export type QuerySearchArgs = {
 };
 
 
-export type QueryTimelineArgs = {
-  request: TimelineRequest;
-};
-
-
 export type QueryTxIdToTxHashArgs = {
   txId: Scalars['TxId'];
 };
@@ -3393,6 +3649,21 @@ export enum ReactionTypes {
   Upvote = 'UPVOTE'
 }
 
+export type RecipientDataInput = {
+  /** Recipient of collect fees. */
+  recipient: Scalars['EthereumAddress'];
+  /** Split %, should be between 1 and 100. All % should add up to 100 */
+  split: Scalars['Float'];
+};
+
+export type RecipientDataOutput = {
+  __typename?: 'RecipientDataOutput';
+  /** Recipient of collect fees. */
+  recipient: Scalars['EthereumAddress'];
+  /** Split %, should be between 1 and 100. All % should add up to 100 */
+  split: Scalars['Float'];
+};
+
 export type RecommendedProfileOptions = {
   /** If you wish to turn ML off */
   disableML?: InputMaybe<Scalars['Boolean']>;
@@ -3403,7 +3674,7 @@ export type RecommendedProfileOptions = {
 export type ReferenceModule = DegreesOfSeparationReferenceModuleSettings | FollowOnlyReferenceModuleSettings | UnknownReferenceModuleSettings;
 
 export type ReferenceModuleParams = {
-  /** The degrees of seperation reference module */
+  /** The degrees of separation reference module */
   degreesOfSeparationReferenceModule?: InputMaybe<DegreesOfSeparationReferenceModuleParams>;
   /** The follower only reference module */
   followerOnlyReferenceModule?: InputMaybe<Scalars['Boolean']>;
@@ -3662,27 +3933,6 @@ export type TimedFeeCollectModuleSettings = {
   type: CollectModules;
 };
 
-export type TimelineRequest = {
-  cursor?: InputMaybe<Scalars['Cursor']>;
-  limit?: InputMaybe<Scalars['LimitScalar']>;
-  metadata?: InputMaybe<PublicationMetadataFilters>;
-  /** The profile id */
-  profileId: Scalars['ProfileId'];
-  /** The App Id */
-  sources?: InputMaybe<Array<Scalars['Sources']>>;
-  /** The timeline types you wish to include, if nothing passed in will bring back all */
-  timelineTypes?: InputMaybe<Array<TimelineType>>;
-};
-
-/** Timeline types */
-export enum TimelineType {
-  CollectComment = 'COLLECT_COMMENT',
-  CollectPost = 'COLLECT_POST',
-  Comment = 'COMMENT',
-  Mirror = 'MIRROR',
-  Post = 'POST'
-}
-
 export type TransactionError = {
   __typename?: 'TransactionError';
   reason: TransactionErrorReasons;
@@ -3861,7 +4111,70 @@ export type WorldcoinPhoneVerifyWebhookRequest = {
   signalType: WorldcoinPhoneVerifyType;
 };
 
+type CollectModuleFields_AaveFeeCollectModuleSettings_Fragment = { __typename: 'AaveFeeCollectModuleSettings' };
+
+type CollectModuleFields_Erc4626FeeCollectModuleSettings_Fragment = { __typename: 'ERC4626FeeCollectModuleSettings' };
+
+type CollectModuleFields_FeeCollectModuleSettings_Fragment = { __typename: 'FeeCollectModuleSettings', type: CollectModules, recipient: any, referralFee: number, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } };
+
+type CollectModuleFields_FreeCollectModuleSettings_Fragment = { __typename: 'FreeCollectModuleSettings', type: CollectModules, followerOnly: boolean, contractAddress: any };
+
+type CollectModuleFields_LimitedFeeCollectModuleSettings_Fragment = { __typename: 'LimitedFeeCollectModuleSettings', type: CollectModules, collectLimit: string, recipient: any, referralFee: number, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } };
+
+type CollectModuleFields_LimitedTimedFeeCollectModuleSettings_Fragment = { __typename: 'LimitedTimedFeeCollectModuleSettings', type: CollectModules, collectLimit: string, recipient: any, referralFee: number, endTimestamp: any, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } };
+
+type CollectModuleFields_MultirecipientFeeCollectModuleSettings_Fragment = { __typename: 'MultirecipientFeeCollectModuleSettings' };
+
+type CollectModuleFields_RevertCollectModuleSettings_Fragment = { __typename: 'RevertCollectModuleSettings', type: CollectModules };
+
+type CollectModuleFields_TimedFeeCollectModuleSettings_Fragment = { __typename: 'TimedFeeCollectModuleSettings', type: CollectModules, recipient: any, referralFee: number, endTimestamp: any, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } };
+
+type CollectModuleFields_UnknownCollectModuleSettings_Fragment = { __typename: 'UnknownCollectModuleSettings', type: CollectModules, contractAddress: any, collectModuleReturnData: any };
+
+export type CollectModuleFieldsFragment = CollectModuleFields_AaveFeeCollectModuleSettings_Fragment | CollectModuleFields_Erc4626FeeCollectModuleSettings_Fragment | CollectModuleFields_FeeCollectModuleSettings_Fragment | CollectModuleFields_FreeCollectModuleSettings_Fragment | CollectModuleFields_LimitedFeeCollectModuleSettings_Fragment | CollectModuleFields_LimitedTimedFeeCollectModuleSettings_Fragment | CollectModuleFields_MultirecipientFeeCollectModuleSettings_Fragment | CollectModuleFields_RevertCollectModuleSettings_Fragment | CollectModuleFields_TimedFeeCollectModuleSettings_Fragment | CollectModuleFields_UnknownCollectModuleSettings_Fragment;
+
+export type Erc20FieldsFragment = { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any };
+
+export type MediaFieldsFragment = { __typename?: 'Media', url: any, mimeType?: any | null };
+
+export type MetadataOutputFieldsFragment = { __typename?: 'MetadataOutput', name?: string | null, description?: any | null, content?: any | null, media: Array<{ __typename?: 'MediaSet', original: { __typename?: 'Media', url: any, mimeType?: any | null } }>, attributes: Array<{ __typename?: 'MetadataAttributeOutput', displayType?: PublicationMetadataDisplayTypes | null, traitType?: string | null, value?: string | null }> };
+
+export type PostFieldsFragment = { __typename?: 'Post', id: any, createdAt: any, appId?: any | null, hidden: boolean, reaction?: ReactionTypes | null, mirrors: Array<any>, hasCollectedByMe: boolean, profile: { __typename?: 'Profile', id: any, name?: string | null, handle: any, bio?: string | null, ownedBy: any, isFollowedByMe: boolean, stats: { __typename?: 'ProfileStats', totalFollowers: number, totalFollowing: number }, attributes?: Array<{ __typename?: 'Attribute', key: string, value: string }> | null, picture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any } } | { __typename?: 'NftImage', uri: any } | null, followModule?: { __typename: 'FeeFollowModuleSettings' } | { __typename: 'ProfileFollowModuleSettings' } | { __typename: 'RevertFollowModuleSettings' } | { __typename: 'UnknownFollowModuleSettings' } | null }, stats: { __typename?: 'PublicationStats', totalAmountOfMirrors: number, totalAmountOfCollects: number, totalAmountOfComments: number, totalUpvotes: number }, metadata: { __typename?: 'MetadataOutput', name?: string | null, description?: any | null, content?: any | null, media: Array<{ __typename?: 'MediaSet', original: { __typename?: 'Media', url: any, mimeType?: any | null } }>, attributes: Array<{ __typename?: 'MetadataAttributeOutput', displayType?: PublicationMetadataDisplayTypes | null, traitType?: string | null, value?: string | null }> }, collectModule: { __typename: 'AaveFeeCollectModuleSettings' } | { __typename: 'ERC4626FeeCollectModuleSettings' } | { __typename: 'FeeCollectModuleSettings', type: CollectModules, recipient: any, referralFee: number, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'FreeCollectModuleSettings', type: CollectModules, followerOnly: boolean, contractAddress: any } | { __typename: 'LimitedFeeCollectModuleSettings', type: CollectModules, collectLimit: string, recipient: any, referralFee: number, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'LimitedTimedFeeCollectModuleSettings', type: CollectModules, collectLimit: string, recipient: any, referralFee: number, endTimestamp: any, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'MultirecipientFeeCollectModuleSettings' } | { __typename: 'RevertCollectModuleSettings', type: CollectModules } | { __typename: 'TimedFeeCollectModuleSettings', type: CollectModules, recipient: any, referralFee: number, endTimestamp: any, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'UnknownCollectModuleSettings', type: CollectModules, contractAddress: any, collectModuleReturnData: any }, referenceModule?: { __typename?: 'DegreesOfSeparationReferenceModuleSettings', type: ReferenceModules, contractAddress: any, commentsRestricted: boolean, mirrorsRestricted: boolean, degreesOfSeparation: number } | { __typename?: 'FollowOnlyReferenceModuleSettings', type: ReferenceModules, contractAddress: any } | { __typename?: 'UnknownReferenceModuleSettings', type: ReferenceModules, contractAddress: any, referenceModuleReturnData: any } | null };
+
 export type ProfileFieldsFragment = { __typename?: 'Profile', id: any, name?: string | null, handle: any, bio?: string | null, ownedBy: any, isFollowedByMe: boolean, stats: { __typename?: 'ProfileStats', totalFollowers: number, totalFollowing: number }, attributes?: Array<{ __typename?: 'Attribute', key: string, value: string }> | null, picture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any } } | { __typename?: 'NftImage', uri: any } | null, followModule?: { __typename: 'FeeFollowModuleSettings' } | { __typename: 'ProfileFollowModuleSettings' } | { __typename: 'RevertFollowModuleSettings' } | { __typename: 'UnknownFollowModuleSettings' } | null };
+
+export type PublicationStatsFieldsFragment = { __typename?: 'PublicationStats', totalAmountOfMirrors: number, totalAmountOfCollects: number, totalAmountOfComments: number, totalUpvotes: number };
+
+type ReferenceModuleFields_DegreesOfSeparationReferenceModuleSettings_Fragment = { __typename?: 'DegreesOfSeparationReferenceModuleSettings', type: ReferenceModules, contractAddress: any, commentsRestricted: boolean, mirrorsRestricted: boolean, degreesOfSeparation: number };
+
+type ReferenceModuleFields_FollowOnlyReferenceModuleSettings_Fragment = { __typename?: 'FollowOnlyReferenceModuleSettings', type: ReferenceModules, contractAddress: any };
+
+type ReferenceModuleFields_UnknownReferenceModuleSettings_Fragment = { __typename?: 'UnknownReferenceModuleSettings', type: ReferenceModules, contractAddress: any, referenceModuleReturnData: any };
+
+export type ReferenceModuleFieldsFragment = ReferenceModuleFields_DegreesOfSeparationReferenceModuleSettings_Fragment | ReferenceModuleFields_FollowOnlyReferenceModuleSettings_Fragment | ReferenceModuleFields_UnknownReferenceModuleSettings_Fragment;
+
+export type ExplorePublicationsQueryVariables = Exact<{
+  request: ExplorePublicationRequest;
+}>;
+
+
+export type ExplorePublicationsQuery = { __typename?: 'Query', explorePublications: { __typename?: 'ExplorePublicationResult', items: Array<{ __typename?: 'Comment' } | { __typename?: 'Mirror' } | { __typename?: 'Post', id: any, createdAt: any, appId?: any | null, hidden: boolean, reaction?: ReactionTypes | null, mirrors: Array<any>, hasCollectedByMe: boolean, profile: { __typename?: 'Profile', id: any, name?: string | null, handle: any, bio?: string | null, ownedBy: any, isFollowedByMe: boolean, stats: { __typename?: 'ProfileStats', totalFollowers: number, totalFollowing: number }, attributes?: Array<{ __typename?: 'Attribute', key: string, value: string }> | null, picture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any } } | { __typename?: 'NftImage', uri: any } | null, followModule?: { __typename: 'FeeFollowModuleSettings' } | { __typename: 'ProfileFollowModuleSettings' } | { __typename: 'RevertFollowModuleSettings' } | { __typename: 'UnknownFollowModuleSettings' } | null }, stats: { __typename?: 'PublicationStats', totalAmountOfMirrors: number, totalAmountOfCollects: number, totalAmountOfComments: number, totalUpvotes: number }, metadata: { __typename?: 'MetadataOutput', name?: string | null, description?: any | null, content?: any | null, media: Array<{ __typename?: 'MediaSet', original: { __typename?: 'Media', url: any, mimeType?: any | null } }>, attributes: Array<{ __typename?: 'MetadataAttributeOutput', displayType?: PublicationMetadataDisplayTypes | null, traitType?: string | null, value?: string | null }> }, collectModule: { __typename: 'AaveFeeCollectModuleSettings' } | { __typename: 'ERC4626FeeCollectModuleSettings' } | { __typename: 'FeeCollectModuleSettings', type: CollectModules, recipient: any, referralFee: number, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'FreeCollectModuleSettings', type: CollectModules, followerOnly: boolean, contractAddress: any } | { __typename: 'LimitedFeeCollectModuleSettings', type: CollectModules, collectLimit: string, recipient: any, referralFee: number, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'LimitedTimedFeeCollectModuleSettings', type: CollectModules, collectLimit: string, recipient: any, referralFee: number, endTimestamp: any, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'MultirecipientFeeCollectModuleSettings' } | { __typename: 'RevertCollectModuleSettings', type: CollectModules } | { __typename: 'TimedFeeCollectModuleSettings', type: CollectModules, recipient: any, referralFee: number, endTimestamp: any, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'UnknownCollectModuleSettings', type: CollectModules, contractAddress: any, collectModuleReturnData: any }, referenceModule?: { __typename?: 'DegreesOfSeparationReferenceModuleSettings', type: ReferenceModules, contractAddress: any, commentsRestricted: boolean, mirrorsRestricted: boolean, degreesOfSeparation: number } | { __typename?: 'FollowOnlyReferenceModuleSettings', type: ReferenceModules, contractAddress: any } | { __typename?: 'UnknownReferenceModuleSettings', type: ReferenceModules, contractAddress: any, referenceModuleReturnData: any } | null }>, pageInfo: { __typename?: 'PaginatedResultInfo', prev?: any | null, next?: any | null, totalCount?: number | null } } };
+
+export type ProfileQueryVariables = Exact<{
+  request: SingleProfileQueryRequest;
+  who?: InputMaybe<Scalars['ProfileId']>;
+}>;
+
+
+export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: any, handle: any, ownedBy: any, name?: string | null, bio?: string | null, metadata?: any | null, followNftAddress?: any | null, isFollowedByMe: boolean, isFollowing: boolean, attributes?: Array<{ __typename?: 'Attribute', key: string, value: string }> | null, dispatcher?: { __typename?: 'Dispatcher', canUseRelay: boolean } | null, onChainIdentity: { __typename?: 'OnChainIdentity', proofOfHumanity: boolean, sybilDotOrg: { __typename?: 'SybilDotOrgIdentity', verified: boolean, source: { __typename?: 'SybilDotOrgIdentitySource', twitter: { __typename?: 'SybilDotOrgTwitterIdentity', handle?: string | null } } }, ens?: { __typename?: 'EnsOnChainIdentity', name?: any | null } | null, worldcoin: { __typename?: 'WorldcoinIdentity', isHuman: boolean } }, stats: { __typename?: 'ProfileStats', totalFollowers: number, totalFollowing: number, totalPosts: number, totalComments: number, totalMirrors: number }, picture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any } } | { __typename?: 'NftImage', uri: any } | null, coverPicture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any } } | { __typename?: 'NftImage' } | null, followModule?: { __typename: 'FeeFollowModuleSettings' } | { __typename: 'ProfileFollowModuleSettings' } | { __typename: 'RevertFollowModuleSettings' } | { __typename: 'UnknownFollowModuleSettings' } | null } | null };
+
+export type PublicationsQueryVariables = Exact<{
+  request: PublicationsQueryRequest;
+  reactionRequest?: InputMaybe<ReactionFieldResolverRequest>;
+}>;
+
+
+export type PublicationsQuery = { __typename?: 'Query', publications: { __typename?: 'PaginatedPublicationResult', items: Array<{ __typename: 'Comment' } | { __typename: 'Mirror' } | { __typename: 'Post', id: any, createdAt: any, appId?: any | null, hidden: boolean, reaction?: ReactionTypes | null, mirrors: Array<any>, hasCollectedByMe: boolean, profile: { __typename?: 'Profile', id: any, name?: string | null, handle: any, bio?: string | null, ownedBy: any, isFollowedByMe: boolean, stats: { __typename?: 'ProfileStats', totalFollowers: number, totalFollowing: number }, attributes?: Array<{ __typename?: 'Attribute', key: string, value: string }> | null, picture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any } } | { __typename?: 'NftImage', uri: any } | null, followModule?: { __typename: 'FeeFollowModuleSettings' } | { __typename: 'ProfileFollowModuleSettings' } | { __typename: 'RevertFollowModuleSettings' } | { __typename: 'UnknownFollowModuleSettings' } | null }, stats: { __typename?: 'PublicationStats', totalAmountOfMirrors: number, totalAmountOfCollects: number, totalAmountOfComments: number, totalUpvotes: number }, metadata: { __typename?: 'MetadataOutput', name?: string | null, description?: any | null, content?: any | null, media: Array<{ __typename?: 'MediaSet', original: { __typename?: 'Media', url: any, mimeType?: any | null } }>, attributes: Array<{ __typename?: 'MetadataAttributeOutput', displayType?: PublicationMetadataDisplayTypes | null, traitType?: string | null, value?: string | null }> }, collectModule: { __typename: 'AaveFeeCollectModuleSettings' } | { __typename: 'ERC4626FeeCollectModuleSettings' } | { __typename: 'FeeCollectModuleSettings', type: CollectModules, recipient: any, referralFee: number, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'FreeCollectModuleSettings', type: CollectModules, followerOnly: boolean, contractAddress: any } | { __typename: 'LimitedFeeCollectModuleSettings', type: CollectModules, collectLimit: string, recipient: any, referralFee: number, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'LimitedTimedFeeCollectModuleSettings', type: CollectModules, collectLimit: string, recipient: any, referralFee: number, endTimestamp: any, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'MultirecipientFeeCollectModuleSettings' } | { __typename: 'RevertCollectModuleSettings', type: CollectModules } | { __typename: 'TimedFeeCollectModuleSettings', type: CollectModules, recipient: any, referralFee: number, endTimestamp: any, amount: { __typename?: 'ModuleFeeAmount', value: string, asset: { __typename?: 'Erc20', name: string, symbol: string, decimals: number, address: any } } } | { __typename: 'UnknownCollectModuleSettings', type: CollectModules, contractAddress: any, collectModuleReturnData: any }, referenceModule?: { __typename?: 'DegreesOfSeparationReferenceModuleSettings', type: ReferenceModules, contractAddress: any, commentsRestricted: boolean, mirrorsRestricted: boolean, degreesOfSeparation: number } | { __typename?: 'FollowOnlyReferenceModuleSettings', type: ReferenceModules, contractAddress: any } | { __typename?: 'UnknownReferenceModuleSettings', type: ReferenceModules, contractAddress: any, referenceModuleReturnData: any } | null }>, pageInfo: { __typename?: 'PaginatedResultInfo', prev?: any | null, next?: any | null, totalCount?: number | null } } };
 
 export type RecommendedProfilesQueryVariables = Exact<{
   options?: InputMaybe<RecommendedProfileOptions>;
@@ -3871,4 +4184,14 @@ export type RecommendedProfilesQueryVariables = Exact<{
 export type RecommendedProfilesQuery = { __typename?: 'Query', recommendedProfiles: Array<{ __typename?: 'Profile', isFollowedByMe: boolean, id: any, name?: string | null, handle: any, bio?: string | null, ownedBy: any, stats: { __typename?: 'ProfileStats', totalFollowers: number, totalFollowing: number }, attributes?: Array<{ __typename?: 'Attribute', key: string, value: string }> | null, picture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any } } | { __typename?: 'NftImage', uri: any } | null, followModule?: { __typename: 'FeeFollowModuleSettings' } | { __typename: 'ProfileFollowModuleSettings' } | { __typename: 'RevertFollowModuleSettings' } | { __typename: 'UnknownFollowModuleSettings' } | null }> };
 
 export const ProfileFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProfileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Profile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"ownedBy"}},{"kind":"Field","name":{"kind":"Name","value":"isFollowedByMe"}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalFollowers"}},{"kind":"Field","name":{"kind":"Name","value":"totalFollowing"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"picture"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaSet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"original"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"NftImage"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"followModule"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]} as unknown as DocumentNode<ProfileFieldsFragment, unknown>;
+export const PublicationStatsFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PublicationStatsFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PublicationStats"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalAmountOfMirrors"}},{"kind":"Field","name":{"kind":"Name","value":"totalAmountOfCollects"}},{"kind":"Field","name":{"kind":"Name","value":"totalAmountOfComments"}},{"kind":"Field","name":{"kind":"Name","value":"totalUpvotes"}}]}}]} as unknown as DocumentNode<PublicationStatsFieldsFragment, unknown>;
+export const MediaFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MediaFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Media"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}}]}}]} as unknown as DocumentNode<MediaFieldsFragment, unknown>;
+export const MetadataOutputFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MetadataOutputFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MetadataOutput"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"original"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MediaFields"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayType"}},{"kind":"Field","name":{"kind":"Name","value":"traitType"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<MetadataOutputFieldsFragment, unknown>;
+export const Erc20FieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Erc20Fields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Erc20"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"symbol"}},{"kind":"Field","name":{"kind":"Name","value":"decimals"}},{"kind":"Field","name":{"kind":"Name","value":"address"}}]}}]} as unknown as DocumentNode<Erc20FieldsFragment, unknown>;
+export const CollectModuleFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CollectModuleFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CollectModule"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FreeCollectModuleSettings"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"followerOnly"}},{"kind":"Field","name":{"kind":"Name","value":"contractAddress"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FeeCollectModuleSettings"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"asset"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Erc20Fields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"recipient"}},{"kind":"Field","name":{"kind":"Name","value":"referralFee"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"LimitedFeeCollectModuleSettings"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"collectLimit"}},{"kind":"Field","name":{"kind":"Name","value":"amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"asset"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Erc20Fields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"recipient"}},{"kind":"Field","name":{"kind":"Name","value":"referralFee"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"LimitedTimedFeeCollectModuleSettings"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"collectLimit"}},{"kind":"Field","name":{"kind":"Name","value":"amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"asset"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Erc20Fields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"recipient"}},{"kind":"Field","name":{"kind":"Name","value":"referralFee"}},{"kind":"Field","name":{"kind":"Name","value":"endTimestamp"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RevertCollectModuleSettings"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"TimedFeeCollectModuleSettings"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"asset"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Erc20Fields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"recipient"}},{"kind":"Field","name":{"kind":"Name","value":"referralFee"}},{"kind":"Field","name":{"kind":"Name","value":"endTimestamp"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UnknownCollectModuleSettings"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"contractAddress"}},{"kind":"Field","name":{"kind":"Name","value":"collectModuleReturnData"}}]}}]}}]} as unknown as DocumentNode<CollectModuleFieldsFragment, unknown>;
+export const ReferenceModuleFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ReferenceModuleFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ReferenceModule"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FollowOnlyReferenceModuleSettings"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"contractAddress"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UnknownReferenceModuleSettings"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"contractAddress"}},{"kind":"Field","name":{"kind":"Name","value":"referenceModuleReturnData"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"DegreesOfSeparationReferenceModuleSettings"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"contractAddress"}},{"kind":"Field","name":{"kind":"Name","value":"commentsRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"mirrorsRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"degreesOfSeparation"}}]}}]}}]} as unknown as DocumentNode<ReferenceModuleFieldsFragment, unknown>;
+export const PostFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PostFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Post"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProfileFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationStatsFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MetadataOutputFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"collectModule"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CollectModuleFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"referenceModule"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ReferenceModuleFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"appId"}},{"kind":"Field","name":{"kind":"Name","value":"hidden"}},{"kind":"Field","name":{"kind":"Name","value":"reaction"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"request"},"value":{"kind":"NullValue"}}]},{"kind":"Field","name":{"kind":"Name","value":"mirrors"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"by"},"value":{"kind":"NullValue"}}]},{"kind":"Field","name":{"kind":"Name","value":"hasCollectedByMe"}}]}}]} as unknown as DocumentNode<PostFieldsFragment, unknown>;
+export const ExplorePublicationsDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ExplorePublications"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"request"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ExplorePublicationRequest"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"explorePublications"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"request"},"value":{"kind":"Variable","name":{"kind":"Name","value":"request"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Post"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PostFields"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"prev"}},{"kind":"Field","name":{"kind":"Name","value":"next"}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]}},...PostFieldsFragmentDoc.definitions,...ProfileFieldsFragmentDoc.definitions,...PublicationStatsFieldsFragmentDoc.definitions,...MetadataOutputFieldsFragmentDoc.definitions,...MediaFieldsFragmentDoc.definitions,...CollectModuleFieldsFragmentDoc.definitions,...Erc20FieldsFragmentDoc.definitions,...ReferenceModuleFieldsFragmentDoc.definitions]} as unknown as DocumentNode<ExplorePublicationsQuery, ExplorePublicationsQueryVariables>;
+export const ProfileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Profile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"request"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SingleProfileQueryRequest"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"who"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ProfileId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"profile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"request"},"value":{"kind":"Variable","name":{"kind":"Name","value":"request"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}},{"kind":"Field","name":{"kind":"Name","value":"ownedBy"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}},{"kind":"Field","name":{"kind":"Name","value":"followNftAddress"}},{"kind":"Field","name":{"kind":"Name","value":"isFollowedByMe"}},{"kind":"Field","name":{"kind":"Name","value":"isFollowing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"who"},"value":{"kind":"Variable","name":{"kind":"Name","value":"who"}}}]},{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dispatcher"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"canUseRelay"}}]}},{"kind":"Field","name":{"kind":"Name","value":"onChainIdentity"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"proofOfHumanity"}},{"kind":"Field","name":{"kind":"Name","value":"sybilDotOrg"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verified"}},{"kind":"Field","name":{"kind":"Name","value":"source"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"twitter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"ens"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"worldcoin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isHuman"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalFollowers"}},{"kind":"Field","name":{"kind":"Name","value":"totalFollowing"}},{"kind":"Field","name":{"kind":"Name","value":"totalPosts"}},{"kind":"Field","name":{"kind":"Name","value":"totalComments"}},{"kind":"Field","name":{"kind":"Name","value":"totalMirrors"}}]}},{"kind":"Field","name":{"kind":"Name","value":"picture"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaSet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"original"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"NftImage"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"coverPicture"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaSet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"original"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"followModule"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]} as unknown as DocumentNode<ProfileQuery, ProfileQueryVariables>;
+export const PublicationsDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Publications"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"request"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PublicationsQueryRequest"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"reactionRequest"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ReactionFieldResolverRequest"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publications"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"request"},"value":{"kind":"Variable","name":{"kind":"Name","value":"request"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Post"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PostFields"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"prev"}},{"kind":"Field","name":{"kind":"Name","value":"next"}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]}},...PostFieldsFragmentDoc.definitions,...ProfileFieldsFragmentDoc.definitions,...PublicationStatsFieldsFragmentDoc.definitions,...MetadataOutputFieldsFragmentDoc.definitions,...MediaFieldsFragmentDoc.definitions,...CollectModuleFieldsFragmentDoc.definitions,...Erc20FieldsFragmentDoc.definitions,...ReferenceModuleFieldsFragmentDoc.definitions]} as unknown as DocumentNode<PublicationsQuery, PublicationsQueryVariables>;
 export const RecommendedProfilesDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RecommendedProfiles"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"options"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RecommendedProfileOptions"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"recommendedProfiles"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"options"},"value":{"kind":"Variable","name":{"kind":"Name","value":"options"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProfileFields"}},{"kind":"Field","name":{"kind":"Name","value":"isFollowedByMe"}}]}}]}},...ProfileFieldsFragmentDoc.definitions]} as unknown as DocumentNode<RecommendedProfilesQuery, RecommendedProfilesQueryVariables>;
