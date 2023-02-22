@@ -1,10 +1,12 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
 import { useExplorePublicationsQuery, useProfileQuery, useRecommendedProfilesQuery } from '../../types/graph';
-import { Profile, PublicationMainFocus, PublicationSortCriteria, PublicationTypes } from '../../types/lens';
+import { Profile, Publication, PublicationMainFocus, PublicationSortCriteria, PublicationTypes } from '../../types/lens';
 import { NavigationProp } from '@react-navigation/native';
 import { sanitizeIpfsUrl } from '../../utils/sanitizeIpfsUrl';
 import React from 'react';
 import VideoPlayer from 'expo-video-player';
+import { ResizeMode } from 'expo-av'
+import BottomNav from './BottomNav';
 
 
 type HomeProps = {
@@ -15,9 +17,9 @@ const Home = ({ navigation }: HomeProps) => {
   const { data } = useExplorePublicationsQuery({
     variables: {
       request: {
-        sortCriteria: PublicationSortCriteria.Latest,
+        sortCriteria: PublicationSortCriteria.CuratedProfiles,
         publicationTypes: [PublicationTypes.Post],
-        limit: 20,
+        limit: 10,
         metadata: {
           mainContentFocus: [PublicationMainFocus.Video]
         }
@@ -27,38 +29,42 @@ const Home = ({ navigation }: HomeProps) => {
 
   const publications = data?.explorePublications.items
 
+  const Item = ({ item: publication }: { item: Publication }) => (
+    <View style={{
+      height: 800
+    }}>
+      <VideoPlayer
+        videoProps={{
+          shouldPlay: true,
+          isLooping: true,
+          isMuted: true,
+          resizeMode: ResizeMode.CONTAIN,
+          source: {
+            uri: `${publication.metadata.media[0].original.url}`
+          },
+        }}
+      />
+    </View>
+  );
+
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.timeline}>
-        {publications?.map((publication) => (
-          <>
-            {publication.__typename === 'Post' && (
-              <View style={{
-                margin: 10
-              }}>
-                <VideoPlayer
-                  videoProps={{
-                    source: {
-                      uri: `${publication.metadata.media[0].original.url}`
-                    },
-                  }}
-                />
-                <Text>{sanitizeIpfsUrl(publication.metadata.media[0].original.url)}</Text>
-              </View>
-            )}
-          </>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
-    
+    <>
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={publications}
+          renderItem={Item}
+          pagingEnabled={true}
+          keyExtractor={item => item.id} 
+        />
+      </SafeAreaView>
+      <BottomNav />
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 100,
-    marginHorizontal: 50,
-    padding: 5
+    height: 800,
   },
   timeline: {
     backgroundColor: '#fff',
