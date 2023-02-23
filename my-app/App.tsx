@@ -4,6 +4,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Profile from "./components/Profile Page";
 import ProfileScreen from "./components/Profile Page";
+import BottomNav from "./components/Home Page/BottomNav";
 
 export default function App() {
   const client = new ApolloClient({
@@ -18,14 +19,14 @@ export default function App() {
       <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerShown: false
+          headerShown: false,
         }}
       >
       <Stack.Screen
         name="Home"
         component={Home}
       />
-      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="Navigation" component={BottomNav} />
       </Stack.Navigator>
       </NavigationContainer>
     </ApolloProvider>

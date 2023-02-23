@@ -1,11 +1,11 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
-import { useExplorePublicationsQuery, useProfileQuery, useRecommendedProfilesQuery } from '../../types/graph';
-import { Profile, Publication, PublicationMainFocus, PublicationSortCriteria, PublicationTypes } from '../../types/lens';
+import { FlatList } from 'react-native';
+import { ExplorePublicationResult, ExplorePublicationsDocument } from '../../types/lens';
 import { NavigationProp } from '@react-navigation/native';
-import { sanitizeIpfsUrl } from '../../utils/sanitizeIpfsUrl';
-import React from 'react';
-import VideoPlayer from 'expo-video-player';
-import { ResizeMode } from 'expo-av'
+import React, { useState } from 'react';
+import { useQuery } from '@apollo/client';
+import VideoCard from './VideoCard';
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { WINDOW_HEIGHT } from '../../utils/getHeight';
 import BottomNav from './BottomNav';
 
 
@@ -14,79 +14,43 @@ type HomeProps = {
 };
 
 const Home = ({ navigation }: HomeProps) => {
-  const { data } = useExplorePublicationsQuery({
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+
+  const { data } = useQuery<{
+    explorePublications: ExplorePublicationResult;
+  }>(ExplorePublicationsDocument, {
     variables: {
       request: {
-        sortCriteria: PublicationSortCriteria.CuratedProfiles,
-        publicationTypes: [PublicationTypes.Post],
+        sortCriteria: 'CURATED_PROFILES',
+        publicationTypes: ['POST'],
         limit: 10,
         metadata: {
-          mainContentFocus: [PublicationMainFocus.Video]
+          mainContentFocus: ['VIDEO']
         }
       }
     }
   })
 
   const publications = data?.explorePublications.items
-
-  const Item = ({ item: publication }: { item: Publication }) => (
-    <View style={{
-      height: 800
-    }}>
-      <VideoPlayer
-        videoProps={{
-          shouldPlay: true,
-          isLooping: true,
-          isMuted: true,
-          resizeMode: ResizeMode.CONTAIN,
-          source: {
-            uri: `${publication.metadata.media[0].original.url}`
-          },
-        }}
-      />
-    </View>
-  );
-
+ 
   return (
     <>
-      <SafeAreaView style={styles.container}>
-        <FlatList
-          data={publications}
-          renderItem={Item}
-          pagingEnabled={true}
-          keyExtractor={item => item.id} 
-        />
-      </SafeAreaView>
+      <FlatList
+        data={publications}
+        pagingEnabled
+        renderItem={({ item, index }) => (
+          <VideoCard data={item} isActive={activeVideoIndex === index} />
+        )}
+        onScroll={(e) => {
+        const index = Math.round(
+          e.nativeEvent.contentOffset.y / (WINDOW_HEIGHT - 65)
+        );
+        setActiveVideoIndex(index);
+      }}
+    />
       <BottomNav />
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    height: 800,
-  },
-  timeline: {
-    backgroundColor: '#fff',
-  },
-  items: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  itemsContainer: {
-    marginLeft: 10
-  },
-  followContainer: {
-    flexDirection: 'row'
-  },
-  followers: {
-    marginRight: 5
-  },
-  tinyLogo: {
-    width: 50,
-    height: 50,
-    borderRadius: 50
-  },
-});
 
 export default Home
