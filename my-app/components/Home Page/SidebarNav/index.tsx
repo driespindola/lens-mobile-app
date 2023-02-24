@@ -18,12 +18,17 @@ const SidebarNav: React.FC<Props> = ({ data }) => {
                 uri: `${getAvatar(data.profile)}`,
             }}
           />
-          <PlusCircleIcon color='#7CC73D' 
-          style={{
-            position: 'absolute',
-            left: 20,
-            top: 52,
-          }}/>
+          <View
+            style={{
+              position: 'absolute',
+              left: 20,
+              top: 52,
+              backgroundColor: 'white',
+              borderRadius: 50
+            }}
+          >
+            <PlusCircleIcon color='#7CC73D'/>
+          </View>
         </View>
       
         <View style={styles.items}>
