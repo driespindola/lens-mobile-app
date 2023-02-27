@@ -1,5 +1,5 @@
 import * as Apollo from '@apollo/client';
-import { RecommendedProfilesQuery, RecommendedProfilesQueryVariables, RecommendedProfilesDocument, ProfileQuery, ProfileQueryVariables, PublicationsQuery, PublicationsQueryVariables, ExplorePublicationsQuery, ExplorePublicationsQueryVariables, ExplorePublicationsDocument, PublicationsDocument } from './lens';
+import { RecommendedProfilesQuery, RecommendedProfilesQueryVariables, RecommendedProfilesDocument, ProfileQuery, ProfileQueryVariables, PublicationsQuery, PublicationsQueryVariables, ExplorePublicationsQuery, ExplorePublicationsQueryVariables, ExplorePublicationsDocument, PublicationsDocument, ExploreProfilesQuery, ExploreProfilesQueryVariables, ExploreProfilesDocument } from './lens';
 
 export function useRecommendedProfilesQuery(
     baseOptions?: Apollo.QueryHookOptions<RecommendedProfilesQuery, RecommendedProfilesQueryVariables>
@@ -37,6 +37,16 @@ export function useExplorePublicationsQuery(
   const options = { ...baseOptions };
   return Apollo.useQuery<ExplorePublicationsQuery, ExplorePublicationsQueryVariables>(
     ExplorePublicationsDocument,
+    options
+  )
+}
+
+export function useExploreProfilesQuery(
+  baseOptions?: Apollo.QueryHookOptions<ExploreProfilesQuery, ExploreProfilesQueryVariables>
+) {
+  const options = { ...baseOptions };
+  return Apollo.useQuery<ExploreProfilesQuery, ExploreProfilesQueryVariables>(
+    ExploreProfilesDocument,
     options
   )
 }

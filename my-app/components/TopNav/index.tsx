@@ -6,15 +6,7 @@ const TopNav = () => {
     return (
       <View style={styles.container}>
         <VideoCameraIcon color='white' width={39} height={39} />
-        <Text style={{
-          color: 'white',
-          marginLeft: 95
-        }}>Following</Text>
-        <Text style={{
-          color: 'white',
-          marginLeft: 20
-        }}>For you</Text>
-        <MagnifyingGlassIcon color='white' width={39} height={39} style={{ marginLeft: 95 }} />
+        <MagnifyingGlassIcon color='white' width={39} height={39} style={{ marginLeft: 330 }} />
       </View>
     );
   }
