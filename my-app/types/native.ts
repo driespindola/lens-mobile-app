@@ -1,4 +1,4 @@
-import { RouteProp } from "@react-navigation/native";
+import { NavigationProp, RouteProp } from "@react-navigation/native";
 import { Profile } from "./lens";
 
 export type RootStackParamList = {
@@ -7,3 +7,7 @@ export type RootStackParamList = {
 };
 
 export type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Profile'>;
+
+export type NavProps = {
+    navigation: NavigationProp<Record<string, object | undefined>>;
+};

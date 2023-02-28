@@ -5,7 +5,6 @@ import { FlatList } from "react-native";
 import VideoCard from "./VideoCard";
 import { WINDOW_HEIGHT } from "../../../utils/getHeight";
 import BottomNav from "../BottomNav";
-import TopNav from "../../TopNav";
 
 const ForYou = () => {
     const [activeVideoIndex, setActiveVideoIndex] = useState(0);
@@ -42,7 +41,6 @@ const ForYou = () => {
           setActiveVideoIndex(index);
         }}
       />
-        <BottomNav />
       </>
     );
   }

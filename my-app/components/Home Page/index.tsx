@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import React, { useRef, useState } from 'react';
-import BottomNav from './BottomNav';
+import React from 'react';
 import TopNav from '../TopNav';
 import Swiper from 'react-native-swiper';
 import Following from './Following';
@@ -48,7 +47,6 @@ const Home = () => {
           <ForYou />
         </View>
       </Swiper>
-      <BottomNav />
       <TopNav />
     </View>
   );

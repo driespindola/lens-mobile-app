@@ -1,34 +1,17 @@
-import { NavigationContainer } from "@react-navigation/native";
-import Home from "./components/Home Page";
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Profile from "./components/Profile Page";
-import ProfileScreen from "./components/Profile Page";
-import BottomNav from "./components/Home Page/BottomNav";
+import Routes from "./components/Routes";
+import BottomNav from './components/Home Page/BottomNav';
+import { NavProps } from './types/native';
 
-export default function App() {
+export default function App({ navigation }: NavProps) {
   const client = new ApolloClient({
     uri: 'https://api-mumbai.lens.dev/',
     cache: new InMemoryCache(),
   });
 
-  const Stack = createNativeStackNavigator();
-
   return(
     <ApolloProvider client={client}>
-      <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-      <Stack.Screen
-        name="Home"
-        component={Home}
-      />
-      <Stack.Screen name="Navigation" component={BottomNav} />
-      </Stack.Navigator>
-      </NavigationContainer>
+      <Routes />
     </ApolloProvider>
   )
 }

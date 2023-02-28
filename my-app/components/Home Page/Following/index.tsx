@@ -1,9 +1,7 @@
-import { View, ScrollView, Text, Image } from "react-native";
-import { useExploreProfilesQuery, useRecommendedProfilesQuery } from "../../../types/graph";
+import { View, StyleSheet, Text, Image } from "react-native";
+import { useExploreProfilesQuery } from "../../../types/graph";
 import getAvatar from "../../../utils/getAvatar";
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from "../../../utils/getHeight";
-import { MutableRefObject } from "react";
-import Swiper from "react-native-swiper";
 import { ProfileSortCriteria } from "../../../types/lens";
 import { PlusIcon } from "react-native-heroicons/solid";
 
@@ -21,59 +19,21 @@ const Following = () => {
     const profiles = data?.exploreProfiles.items
     
     return (
-        <View
-          style={{
-            width: WINDOW_WIDTH,
-            height: WINDOW_HEIGHT,
-            backgroundColor: '#527862'
-          }}
-        >
-          <Text
-            style={{
-              color: 'white',
-              marginTop: 162,
-              fontSize: 20,
-              fontWeight: 'bold',
-              textAlign: 'center'
-            }}
-          >
+        <View style={styles.container}>
+          <Text style={styles.heading}>
             Popular Creators
           </Text>
-          <Text
-            style={{
-              color: 'white',
-              marginTop: 10,
-              fontSize: 16,
-              textAlign: 'center'
-            }}
-          >
+          <Text style={styles.paragraph}>
             Follow a profile to see their recent videos
           </Text>
-            <View
-              style={{
-                marginTop: 61,
-                marginBottom: 110,
-              }}
-            >
+            <View style={styles.profiles}>
               {profiles?.map((profile) => (
                 <>
                   {profile.isDefault === true && (
-                    <View 
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 10
-                      }}
-                    >
+                    <View style={styles.profilesContainer}>
                       <Image
                         source={{ uri: `${getAvatar(profile)}` }}
-                        style={{
-                          width: 95,
-                          height: 95,
-                          marginHorizontal: 20,
-                          marginTop: 12,
-                          borderRadius: 50
-                        }}
+                        style={styles.profilesPicture}
                       />
                       <View>
                         <View
@@ -81,39 +41,18 @@ const Following = () => {
                           flexDirection: 'row'
                          }}
                         >
-                        <Text
-                          style={{
-                            fontWeight: 'bold',
-                            color: 'white',
-                            alignItems: 'center'
-                          }}
-                        >
+                        <Text style={styles.profilesName}>
                           {profile.name}
                         </Text>
                         <Text
-                         style={{
-                          fontSize: 12,
-                          color: 'white',
-                          marginLeft: 3
-                         }}
+                         style={styles.profilesHandle}
                         >@{profile.handle}</Text>
                         </View>
-                        <Text
-                          style={{
-                            width: 230,
-                            fontSize: 12,
-                            color: '#D2D2D2',
-                            marginTop: 3
-                          }}
-                        >{profile.bio}</Text>
+                        <Text style={styles.profilesBio}>
+                          {profile.bio}
+                        </Text>
                       </View>
-                      <View
-                        style={{
-                          backgroundColor: '#7CC73D',
-                          padding: 3,
-                          borderRadius: 5
-                        }}
-                      >
+                      <View style={styles.followButton}>
                         <PlusIcon color='white' />
                       </View>
                     </View>
@@ -124,5 +63,63 @@ const Following = () => {
         </View>
     );
   }
+
+  const styles = StyleSheet.create({
+    container: {
+      width: WINDOW_WIDTH,
+      height: WINDOW_HEIGHT,
+      backgroundColor: '#527862'
+    },
+    heading: {
+      color: 'white',
+      marginTop: 162,
+      fontSize: 20,
+      fontWeight: 'bold',
+      textAlign: 'center'
+    },
+    paragraph: {
+      color: 'white',
+      marginTop: 10,
+      fontSize: 16,
+      textAlign: 'center'
+    },
+    profiles: {
+      marginTop: 61,
+      marginBottom: 110,
+    },
+    profilesContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 10
+    },
+    profilesPicture: {
+      width: 95,
+      height: 95,
+      marginHorizontal: 20,
+      marginTop: 12,
+      borderRadius: 50
+    },
+    profilesName: {
+      fontWeight: 'bold',
+      color: 'white',
+      alignItems: 'center'
+    },
+    profilesHandle: {
+      fontSize: 12,
+      color: 'white',
+      marginLeft: 3
+    },
+    profilesBio: {
+      width: 230,
+      fontSize: 12,
+      color: '#D2D2D2',
+      marginTop: 3
+    },
+    followButton: {
+      backgroundColor: '#7CC73D',
+      padding: 3,
+      borderRadius: 5
+    }
+  });
   
 export default Following

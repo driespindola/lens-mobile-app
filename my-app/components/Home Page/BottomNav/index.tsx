@@ -1,31 +1,67 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { HomeIcon } from 'react-native-heroicons/solid';
-import { UserIcon, PlusSmallIcon, ChatBubbleLeftEllipsisIcon, UsersIcon } from 'react-native-heroicons/outline';
+import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
+import { ChatBubbleLeftEllipsisIcon, HomeIcon, UserIcon, UsersIcon } from 'react-native-heroicons/solid';
+import { HomeIcon as HomeIconOutline, UserIcon as UserIconOutline, PlusSmallIcon as PlusSmallIconOutline, ChatBubbleLeftEllipsisIcon as ChatBubbleLeftEllipsisIconOutline, UsersIcon as UsersIconOutline } from 'react-native-heroicons/outline';
+import { NavigationProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { NavProps } from '../../../types/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Home from '..';
+import MailboxPage from '../../MailBoxPage';
+import FriendPage from '../../FriendPage';
+import UserPage from '../../UserPage';
+
 
 const BottomNav = () => {
+
+
+  const BottomTab = createBottomTabNavigator();
+
   return(
-    <View style={styles.container}>
-      <View style={styles.icons}>
-        <HomeIcon color='#527862' />
-        <Text style={styles.text}>Home</Text>
-      </View>
-      <View style={styles.icons}>
-        <UsersIcon color='#527862' />
-        <Text style={styles.text}>Friends</Text>
-      </View>
-      <View style={styles.upload}>
-        <PlusSmallIcon color='#7CC73D' />
-      </View>
-      <View style={styles.icons}>
-        <ChatBubbleLeftEllipsisIcon color='#527862' />
-        <Text style={styles.text}>Mailbox</Text>
-      </View>
-      <View style={styles.icons}>
-        <UserIcon color='#527862' />
-        <Text style={styles.text}>User</Text>
-      </View>
-    </View>
+    <BottomTab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: "#527862",
+        tabBarInactiveTintColor: '#527862'
+      }}
+    >
+      <BottomTab.Screen
+        name='Home'
+        component={Home}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            focused ? <HomeIcon color="#527862" /> : <HomeIconOutline color="#527862" />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name='Friends'
+        component={FriendPage}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            focused ? <UserIcon color="#527862" /> : <UserIconOutline color="#527862" />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name='Mailbox'
+        component={MailboxPage}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            focused ? <ChatBubbleLeftEllipsisIcon color="#527862" /> : <ChatBubbleLeftEllipsisIconOutline color="#527862" />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name='User'
+        component={UserPage}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            focused ? <UsersIcon color="#527862" /> : <UsersIconOutline color="#527862" />
+          ),
+        }}
+      />
+    </BottomTab.Navigator>
   )
 }
 
