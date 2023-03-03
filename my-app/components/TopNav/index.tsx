@@ -1,13 +1,41 @@
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { MagnifyingGlassIcon, VideoCameraIcon } from "react-native-heroicons/outline";
+import ForYou from "../Home Page/ForYou";
+import Following from "../Home Page/Following";
 
 const TopNav = () => {
+  
+  const TopTab = createMaterialTopTabNavigator()
+
     return (
-      <View style={styles.container}>
-        <VideoCameraIcon color='white' width={39} height={39} />
-        <MagnifyingGlassIcon color='white' width={39} height={39} style={{ marginLeft: 330 }} />
-      </View>
+      <TopTab.Navigator
+        initialRouteName="For You" 
+        screenOptions={{
+          tabBarLabelStyle: {
+            textTransform: 'capitalize', 
+            color: 'white',
+            fontSize: 16 
+          },
+          tabBarIndicatorStyle: {
+            width: 31,
+            height: 5,
+            backgroundColor: 'white',
+            marginLeft: 36
+          },
+          tabBarStyle: {
+            backgroundColor: 'none',
+            position: 'absolute',
+            left: 100,
+            right: 100,
+            top: 62,
+          },
+        }}
+      >
+        <TopTab.Screen name="Following" component={Following} />
+        <TopTab.Screen name="For You" component={ForYou} />
+      </TopTab.Navigator>
     );
   }
 

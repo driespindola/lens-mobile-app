@@ -4,7 +4,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ProfileScreenRouteProp, RootStackParamList } from "../../types/native";
 import { Profile } from "../../types/lens";
 import getAvatar from "../../utils/getAvatar";
-import Publications from "./Publications";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Profile">;
 
@@ -30,9 +29,7 @@ const ProfilePage: React.FC<ProfileProps> = ({ route, navigation }) => {
           <Text>{route.params.profile.handle}</Text>
         </View>
       </View>
-      <Publications profile={route.params.profile as Profile} />
     </View>
-    
   );
 };
 

@@ -4,13 +4,13 @@ import Home from "../Home Page";
 import MailboxPage from "../MailBoxPage";
 import BottomNav from "../Home Page/BottomNav";
 import TopNav from "../TopNav";
+import ProfileScreen from "../Profile Page";
 
 
 const Routes = () => {
   const Stack = createNativeStackNavigator();
 
   return(
-    <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
@@ -20,8 +20,11 @@ const Routes = () => {
           name="Bottom Nav"
           component={BottomNav}
         />
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+        />
       </Stack.Navigator>
-    </NavigationContainer>
   )
 }
 

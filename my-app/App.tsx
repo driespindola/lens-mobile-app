@@ -2,6 +2,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import Routes from "./components/Routes";
 import BottomNav from './components/Home Page/BottomNav';
 import { NavProps } from './types/native';
+import { NavigationContainer } from '@react-navigation/native';
 
 export default function App({ navigation }: NavProps) {
   const client = new ApolloClient({
@@ -11,7 +12,9 @@ export default function App({ navigation }: NavProps) {
 
   return(
     <ApolloProvider client={client}>
-      <Routes />
+      <NavigationContainer>
+        <Routes />
+      </NavigationContainer>
     </ApolloProvider>
   )
 }
