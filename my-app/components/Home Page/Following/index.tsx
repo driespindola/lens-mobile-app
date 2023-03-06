@@ -1,11 +1,11 @@
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import { useExploreProfilesQuery } from "../../../types/graph";
 import getAvatar from "../../../utils/getAvatar";
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from "../../../utils/getHeight";
 import { ProfileSortCriteria } from "../../../types/lens";
 import { PlusIcon } from "react-native-heroicons/solid";
 
-const Following = () => {
+const Following = ({ navigation }: any) => {
     
   const { data } = useExploreProfilesQuery({
         variables: {
@@ -35,7 +35,9 @@ const Following = () => {
                         source={{ uri: `${getAvatar(profile)}` }}
                         style={styles.profilesPicture}
                       />
-                      <View>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate('Profile', { profileId: profile.id })}
+                      >
                         <View
                          style={{
                           flexDirection: 'row'
@@ -51,7 +53,7 @@ const Following = () => {
                         <Text style={styles.profilesBio}>
                           {profile.bio}
                         </Text>
-                      </View>
+                      </TouchableOpacity>
                       <View style={styles.followButton}>
                         <PlusIcon color='white' />
                       </View>

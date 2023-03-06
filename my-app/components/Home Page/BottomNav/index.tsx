@@ -1,19 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ChatBubbleLeftEllipsisIcon, HomeIcon, UserIcon, UsersIcon } from 'react-native-heroicons/solid';
-import { HomeIcon as HomeIconOutline, UserIcon as UserIconOutline, PlusSmallIcon as PlusSmallIconOutline, ChatBubbleLeftEllipsisIcon as ChatBubbleLeftEllipsisIconOutline, UsersIcon as UsersIconOutline } from 'react-native-heroicons/outline';
-import { NavigationProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { NavProps } from '../../../types/native';
+import { HomeIcon as HomeIconOutline, UserIcon as UserIconOutline, PlusSmallIcon, ChatBubbleLeftEllipsisIcon as ChatBubbleLeftEllipsisIconOutline, UsersIcon as UsersIconOutline } from 'react-native-heroicons/outline';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '..';
 import MailboxPage from '../../MailBoxPage';
 import FriendPage from '../../FriendPage';
 import UserPage from '../../UserPage';
 
-
 const BottomNav = () => {
-
 
   const BottomTab = createBottomTabNavigator();
 

@@ -11,3 +11,8 @@ export type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Profile'>;
 export type NavProps = {
     navigation: NavigationProp<Record<string, object | undefined>>;
 };
+
+export type ParamList = {
+    Home: undefined
+    Profile: { profileId: string }
+}  
