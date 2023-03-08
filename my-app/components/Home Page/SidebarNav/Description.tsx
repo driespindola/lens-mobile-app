@@ -9,8 +9,8 @@ interface Props {
   const Description: React.FC<Props> = ({ data }) => {
     return(
         <View style={styles.container}>
-            <Text style={styles.profile}>{data.profile.handle}</Text>
-            <Text style={styles.description}>{data.metadata.description.slice(0, 140)}</Text>
+          <Text style={styles.profile}>{data.profile.handle}</Text>
+          <Text style={styles.description}>{data.metadata.description.slice(0, 140)}</Text>
         </View>
     )
   }

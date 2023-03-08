@@ -1,10 +1,8 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Home from "../Home Page";
-import MailboxPage from "../MailBoxPage";
+import { View, Text } from "react-native";
 import BottomNav from "../Home Page/BottomNav";
-import TopNav from "../TopNav";
 import ProfileScreen from "../Profile Page";
+import ProfileHeader from "../UI/ProfileHeader";
 
 
 const Routes = () => {
@@ -23,7 +21,7 @@ const Routes = () => {
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
-        />
+      />
       </Stack.Navigator>
   )
 }

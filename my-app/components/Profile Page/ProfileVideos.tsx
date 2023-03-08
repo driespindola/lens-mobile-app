@@ -5,6 +5,7 @@ import { PaginatedPublicationResult, PublicationsDocument } from '../../types/le
 import { Video, ResizeMode } from 'expo-av';
 import { sanitizeIpfsUrl } from '../../utils/sanitizeIpfsUrl';
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils/getHeight';
+import NoVideos from '../UI/NoVideos';
 
 const videoWidth = WINDOW_WIDTH / 3 - 6;
 const videoHeight = videoWidth * 16 / 9;
@@ -29,6 +30,12 @@ const ProfileVideos = ({ profileId }: any) => {
 
   console.log("Width", WINDOW_WIDTH)
   console.log("Height", WINDOW_HEIGHT)
+
+  if (publications?.length === 0) {
+    return(
+      <NoVideos />
+    )
+  }
 
   return (
     <View style={styles.container}>

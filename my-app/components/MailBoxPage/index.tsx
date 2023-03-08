@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from "../../utils/getHeight";
 import { useRecommendedProfilesQuery } from "../../types/graph";
 import getAvatar from "../../utils/getAvatar";
 
-const MailboxPage = () => {
+const MailboxPage = ({ navigation }: any) => {
   const { data } = useRecommendedProfilesQuery({
     variables: {
       options: {
@@ -14,7 +14,6 @@ const MailboxPage = () => {
   })
 
   const profiles = data?.recommendedProfiles.slice(0, 3)
-  console.log(profiles)
   
     return (
       <View
@@ -97,14 +96,18 @@ const MailboxPage = () => {
                   width: 201
                 }}
               >
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    color: 'white'
-                  }}
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Profile', { profileId: profile.id })}
                 >
-                  {profile.name === null ? 'Untitled' : profile.name}
-                </Text>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: 'white'
+                    }}
+                  >
+                    {profile.name === null ? 'Untitled' : profile.name}
+                  </Text>
+                </TouchableOpacity>
                 <Text
                   style={{
                     color: 'white'

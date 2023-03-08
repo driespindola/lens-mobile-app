@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { ProfileDocument } from "../../types/lens";
 import getAvatar from "../../utils/getAvatar";
+import ProfileHeader from "../UI/ProfileHeader";
 import ProfileVideos from "./ProfileVideos";
 
 const ProfileScreen  = ({ route, navigation }: any) => {  
@@ -19,7 +20,8 @@ const ProfileScreen  = ({ route, navigation }: any) => {
   const profile = data?.profile
 
   return (
-    <View>
+    <View style={styles.container}>
+      <ProfileHeader profileName={profile?.name === null ? 'Untitled' : profile?.name} />
       <Image 
         source={{ uri: `${getAvatar(profile)}` }}
         style={styles.image}
@@ -52,12 +54,7 @@ const ProfileScreen  = ({ route, navigation }: any) => {
 
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: '#fff',
-      marginVertical: 100,
-      marginHorizontal: 50,
-      padding: 5,
-      flexDirection: 'row',
-      alignItems: 'center'
+      backgroundColor: 'white',
     },
     image: {
       width: 100,

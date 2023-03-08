@@ -44,14 +44,14 @@ const Following = ({ navigation }: any) => {
                          }}
                         >
                         <Text style={styles.profilesName}>
-                          {profile.name}
+                          {profile.name === null ? 'Untitled' : profile.name}
                         </Text>
                         <Text
                          style={styles.profilesHandle}
                         >@{profile.handle}</Text>
                         </View>
                         <Text style={styles.profilesBio}>
-                          {profile.bio}
+                          {profile.bio === null ? 'No Bio' : profile.bio}
                         </Text>
                       </TouchableOpacity>
                       <View style={styles.followButton}>
