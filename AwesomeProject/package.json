@@ -5,16 +5,27 @@
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "format": "prettier --write \"**/*.js\"",
+    "lint": "eslint ."
   },
   "dependencies": {
+    "@babel/eslint-parser": "^7.21.8",
+    "@babel/preset-env": "^7.1.6",
+    "@ethersproject/abstract-provider": "^5.7.0",
+    "@ethersproject/abstract-signer": "^5.7.0",
+    "@ethersproject/bignumber": "^5.7.0",
+    "@ethersproject/properties": "^5.7.0",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@thirdweb-dev/react-native": "^0.2.13",
     "@thirdweb-dev/react-native-compat": "^0.2.13",
+    "@types/node": "^20.2.3",
     "ethers": "^5",
-    "expo": "~48.0.15",
+    "expo": "^47.0.0",
+    "expo-modules-autolinking": "^1.2.0",
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
+    "localforage": "^1.7.4",
     "node-libs-browser": "^2.2.1",
     "react": "18.2.0",
     "react-native": "0.71.8",
@@ -22,10 +33,15 @@
     "react-native-get-random-values": "^1.9.0",
     "react-native-mmkv": "^2.8.0",
     "react-native-randombytes": "^3.6.1",
-    "react-native-svg": "^13.9.0"
+    "react-native-svg": "^13.9.0",
+    "typescript": "^5.0.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "eslint": "^8.41.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-native": "^4.0.0",
+    "prettier": "^2.8.8"
   },
   "private": true
 }

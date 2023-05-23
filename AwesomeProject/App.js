@@ -18,7 +18,8 @@ const App = () => {
   return (
     <ThirdwebProvider
       activeChain="ethereum"
-      supportedWallets={[metamaskWallet(), rainbowWallet()]}>
+      supportedWallets={[metamaskWallet(), rainbowWallet()]}
+    >
       <AppInner />
     </ThirdwebProvider>
   );
