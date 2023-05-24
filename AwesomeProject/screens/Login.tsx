@@ -1,42 +1,52 @@
 import {
 	ConnectWallet,
+	metamaskWallet,
 	useAddress,
+	useChainId,
+	useConnect,
 	useDisconnect,
 	useWallet,
 } from '@thirdweb-dev/react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	SafeAreaView,
 	StyleSheet,
 	Text,
 	useColorScheme,
 	View,
-	TouchableHighlight,
 	Button,
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import { useAuthenticateMutation, useGetChallengeLazyQuery } from '../src/types/graph';
+import { useAuthenticateMutation, useGetChallengeLazyQuery, useProfilesLazyQuery } from '../src/types/graph';
+import { useAppPersistStore, useAppStore } from '../src/state/app';
 
 
 const Login = () => {
-	const isDarkMode = useColorScheme() === 'dark';
 	const backgroundStyle = {
-		backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+		backgroundColor: Colors.lighter,
 	};
 
 	const textStyles = {
-		color: isDarkMode ? Colors.white : Colors.black,
+		color: Colors.black,
 		...styles.heading,
 	};
 
+	const metamaskConfig = metamaskWallet();
+
+	const connect = useConnect();
 	const disconnect = useDisconnect()
 
 	const address = useAddress();
 	const wallet = useWallet();
 
 	const [loadChallenge] = useGetChallengeLazyQuery()
-
 	const [authenticate] = useAuthenticateMutation()
+	const [loadProfiles] = useProfilesLazyQuery()
+
+	const setProfiles = useAppStore((state) => state.setProfiles);
+  	const setCurrentProfile = useAppStore((state) => state.setCurrentProfile);
+  	const setProfileId = useAppPersistStore((state) => state.setProfileId);
+	const currentProfile = useAppStore((state) => state.currentProfile)
 
 	const signIn = async () => {
 		try {
@@ -61,11 +71,22 @@ const Login = () => {
 				variables: { request: { address, signature } }
 			});
 	
-			if (auth) {
-				console.log("Success");
-			} else {
-				console.log("Error");
-			}
+			const { data: profilesData } = await loadProfiles({
+				variables: { request: { ownedBy: [address] } }
+			})
+
+			const profiles: any = profilesData?.profiles?.items
+          		?.slice()
+          		?.sort((a, b) => Number(a.id) - Number(b.id))
+          		?.sort((a, b) =>
+            	a.isDefault === b.isDefault ? 0 : a.isDefault ? -1 : 1
+          	);
+
+			const getCurrentProfile = profiles[0]
+			setProfiles(profiles)
+			setCurrentProfile(getCurrentProfile)
+			setProfileId(getCurrentProfile.id)
+
 		} catch (error) {
 			console.log(error);
 		}
@@ -75,17 +96,34 @@ const Login = () => {
 		<SafeAreaView style={backgroundStyle}>
 			<View style={styles.view}>
 				<Text style={textStyles}>React Native thirdweb starter</Text>
-				{!address && <ConnectWallet />}
-				{address && (
+				{!address && (
 					<>
 						<Button
-      						title={"Sign In with Lens"}
-      						onPress={signIn}
+      						title={"Connect Wallet"}
+      						onPress={async () => {
+								await connect(metamaskConfig);
+							}}
     					/>
-						<Button
-      						title={"Logout"}
-      						onPress={disconnect}
-    					/>
+					</>
+				)}
+				{address && (
+					<>
+						{!currentProfile && (
+							<Button
+								title={"Sign In with Lens"}
+								onPress={signIn}
+					  		/>
+						)}
+						{currentProfile && (
+							<>
+								<Button
+									title={"Logout"}
+									onPress={disconnect}
+					  			/>
+								<Text>{currentProfile.handle}</Text>
+							</>
+						)}
+						
 					</>
 				)}
 			</View>
