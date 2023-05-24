@@ -1,0 +1,13 @@
+schema: https://api-mumbai.lens.dev
+
+documents: ["./graphql/*.graphql"]
+
+generates:
+  ./src/types/lens.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node
+    config:
+      fetcher: fetch
+      dedupeFragments: true
