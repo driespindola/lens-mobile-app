@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import Login from './screens/Login';
+import BottomTabs from './BottomTabs';
 
 const Stack = createStackNavigator();
 
@@ -13,7 +13,7 @@ const Routes = () => {
                     headerShown: false
                 }}
             >
-                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="Bottom Tabs" component={BottomTabs} />
             </Stack.Navigator>
         </NavigationContainer>
     )

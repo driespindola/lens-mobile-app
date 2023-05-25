@@ -2,6 +2,7 @@ import {
 	metamaskWallet,
 	rainbowWallet,
 	ThirdwebProvider,
+	trustWallet,
 } from '@thirdweb-dev/react-native';
 import React from 'react';
 import {
@@ -11,7 +12,7 @@ import {
 	ApolloLink, 
 	HttpLink
 } from '@apollo/client';
-import Routes from './Routes';
+import Routes from './routes/Routes';
 
 const httpLink = new HttpLink({ uri: 'https://api-mumbai.lens.dev' });
 const link = ApolloLink.from([httpLink]);
@@ -24,8 +25,8 @@ const APClient = new ApolloClient({
 const App = () => {
 	return (
 		<ThirdwebProvider
-			activeChain="mumbai"
-			supportedWallets={[metamaskWallet(), rainbowWallet()]}>
+			activeChain="ethereum"
+			supportedWallets={[metamaskWallet(), trustWallet(), ]}>
 			<ApolloProvider client={APClient}>
 				<Routes />
 			</ApolloProvider>

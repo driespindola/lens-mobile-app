@@ -5,6 +5,7 @@ import {
 	useChainId,
 	useConnect,
 	useDisconnect,
+	useSwitchChain,
 	useWallet,
 } from '@thirdweb-dev/react-native';
 import React, { useState } from 'react';
@@ -17,8 +18,9 @@ import {
 	Button,
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import { useAuthenticateMutation, useGetChallengeLazyQuery, useProfilesLazyQuery } from '../src/types/graph';
-import { useAppPersistStore, useAppStore } from '../src/state/app';
+import { useAuthenticateMutation, useGetChallengeLazyQuery, useProfilesLazyQuery } from '../types/graph';
+import { useAppPersistStore, useAppStore } from '../state/app';
+import { Mumbai } from '@thirdweb-dev/chains';
 
 
 const Login = () => {
@@ -34,10 +36,14 @@ const Login = () => {
 	const metamaskConfig = metamaskWallet();
 
 	const connect = useConnect();
-	const disconnect = useDisconnect()
+	const disconnect = useDisconnect();
+	const chainId = useChainId()
+
+	console.log(chainId)
 
 	const address = useAddress();
 	const wallet = useWallet();
+	const switchChain = useSwitchChain();
 
 	const [loadChallenge] = useGetChallengeLazyQuery()
 	const [authenticate] = useAuthenticateMutation()
@@ -109,21 +115,27 @@ const Login = () => {
 				{address && (
 					<>
 						{!currentProfile && (
-							<Button
+							/*<Button
 								title={"Sign In with Lens"}
 								onPress={signIn}
 					  		/>
-						)}
-						{currentProfile && (
+							*/
 							<>
-								<Button
-									title={"Logout"}
-									onPress={disconnect}
-					  			/>
-								<Text>{currentProfile.handle}</Text>
+							{
+								chainId === 80001 ? (
+									<Button
+										title={"Sign In with Lens"}
+										onPress={signIn}
+					  				/>
+								) : (
+									<Button
+										title={"Switch Network"}
+										onPress={() => switchChain(Mumbai.chainId)}
+									/>
+								)
+							}
 							</>
 						)}
-						
 					</>
 				)}
 			</View>
