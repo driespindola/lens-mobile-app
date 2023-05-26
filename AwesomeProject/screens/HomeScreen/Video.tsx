@@ -6,14 +6,14 @@ import {
 } from 'react-native';
 
 
-const Home = () => {
+const Video = () => {
 	return (
 		<SafeAreaView>
 			<View>
-				<Text>Home Screen</Text>
+				<Text>Video</Text>
 			</View>
 		</SafeAreaView>
 	);
 };
 
-export default Home
+export default Video

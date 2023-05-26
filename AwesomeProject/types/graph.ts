@@ -1,5 +1,5 @@
 import * as Apollo from '@apollo/client';
-import { AuthenticateDocument, AuthenticateMutation, AuthenticateMutationVariables, GetChallengeDocument, GetChallengeQuery, GetChallengeQueryVariables, ProfilesDocument, ProfilesQuery, ProfilesQueryVariables } from './lens';
+import { AuthenticateDocument, AuthenticateMutation, AuthenticateMutationVariables, ExplorePublicationsDocument, ExplorePublicationsQuery, ExplorePublicationsQueryVariables, GetChallengeDocument, GetChallengeQuery, GetChallengeQueryVariables, ProfilesDocument, ProfilesQuery, ProfilesQueryVariables } from './lens';
 
 export function useAuthenticateMutation (
     baseOptions?: Apollo.MutationHookOptions<AuthenticateMutation, AuthenticateMutationVariables>
@@ -20,4 +20,11 @@ export function useProfilesLazyQuery (
 ) {
     const options = { ...baseOptions }
     return Apollo.useLazyQuery<ProfilesQuery, ProfilesQueryVariables>(ProfilesDocument, options)
+}
+
+export function useExplorePublicationsQuery (
+    baseOptions?: Apollo.QueryHookOptions<ExplorePublicationsQuery, ExplorePublicationsQueryVariables>
+) {
+    const options = { ...baseOptions }
+    return Apollo.useQuery<ExplorePublicationsQuery, ExplorePublicationsQueryVariables>(ExplorePublicationsDocument, options )
 }

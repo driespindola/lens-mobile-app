@@ -5,9 +5,9 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { useAppStore } from '../state/app';
+import { useAppStore } from '../../state/app';
 import { useDisconnect } from '@thirdweb-dev/react-native';
-import Login from './Login';
+import Login from './Login'
 
 
 const Profile = () => {

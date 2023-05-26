@@ -18,8 +18,8 @@ import {
 	Button,
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import { useAuthenticateMutation, useGetChallengeLazyQuery, useProfilesLazyQuery } from '../types/graph';
-import { useAppPersistStore, useAppStore } from '../state/app';
+import { useAuthenticateMutation, useGetChallengeLazyQuery, useProfilesLazyQuery } from '../../types/graph';
+import { useAppPersistStore, useAppStore } from '../../state/app';
 import { Mumbai } from '@thirdweb-dev/chains';
 
 
@@ -36,8 +36,7 @@ const Login = () => {
 	const metamaskConfig = metamaskWallet();
 
 	const connect = useConnect();
-	const disconnect = useDisconnect();
-	const chainId = useChainId()
+	const chainId = useChainId();
 
 	console.log(chainId)
 
@@ -115,11 +114,6 @@ const Login = () => {
 				{address && (
 					<>
 						{!currentProfile && (
-							/*<Button
-								title={"Sign In with Lens"}
-								onPress={signIn}
-					  		/>
-							*/
 							<>
 							{
 								chainId === 80001 ? (

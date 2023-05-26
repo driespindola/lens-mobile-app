@@ -1,6 +1,6 @@
 schema: https://api-mumbai.lens.dev
 
-documents: ["./graphql/*.graphql"]
+documents: ["./graphql/*/*.graphql"]
 
 generates:
   ./types/lens.ts:
